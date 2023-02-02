@@ -17,22 +17,56 @@ public class DisplayInventory : MonoBehaviour
 
     [SerializeField]
     private TextMeshProUGUI stackLabel;
+
+    private InventorySystemTest parentInv;
+
+    private InventoryItem reference;
     public void Set(InventoryItem item)
     {
         icon.sprite = item.data.icon;
         Label.text = item.data.name;
-        if(item.stackSize <= 1)
+        reference = item;
+        if (item.stackSize <= 1)
         {
             stack.SetActive(false);
             return;
         }
-        stackLabel.text = item.stackSize.ToString();
+        stackLabel.text = item.stackSize.ToString(); 
     }
+    public void SetInventory(InventorySystemTest t)
+    {
+        parentInv = t;
+    }
+    //Transfers to first active inventory it can find
+    public void TransferClick()
+    {
+        if (parentInv.isPlayerInv)
+        {
+            foreach(InventorySystemTest t in InventorySystemTest.instanceList)
+            {
+                if (t.isPlayerInv == false && t.enabled)
+                {
+                    //remove from parent
+                    parentInv.Remove(reference.data);
+                    //add to first active
+                    t.Add(reference.data);
+                    return;
+                }
+            }
+        }
+        else
+        {
+            parentInv.playerInv.GetComponent<InventorySystemTest>().Add(reference.data);
+            parentInv.Remove(reference.data);
+        }
+    }
+    /*
     public void OnClickTest()
     {
         if (this.gameObject.transform.IsChildOf(InventorySystemTest.instance.gameObject.transform))
         {
             this.gameObject.transform.SetParent(InventorySystemTest.instance.playerInv.transform);
+
         }
         else
         {
@@ -40,4 +74,5 @@ public class DisplayInventory : MonoBehaviour
         }
         //Debug.Log("Gay rights baybeeeeee");
     }
+    */
 }

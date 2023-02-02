@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class InventoryUIManager : MonoBehaviour
 {
+    // Assoiated Inventory
+    public InventorySystemTest backend;
     // Start is called before the first frame update
     public GameObject slotPrefab;
     void Start()
     {
-        InventorySystemTest.instance.onInventoryChangedEvent += OnUpdateInventory;
+        backend.onInventoryChangedEvent += OnUpdateInventory;
     }
-    private void OnUpdateInventory()
+    public void OnUpdateInventory()
     {
         foreach(Transform t in transform)
         {
@@ -20,7 +22,7 @@ public class InventoryUIManager : MonoBehaviour
     }
     public void DrawInventory()
     {
-        foreach(InventoryItem item in InventorySystemTest.instance.inventory)
+        foreach(InventoryItem item in backend.inventory)
         {
             AddInventorySlot(item);
         }
@@ -32,5 +34,6 @@ public class InventoryUIManager : MonoBehaviour
 
         DisplayInventory slot = obj.GetComponent<DisplayInventory>();
         slot.Set(item);
+        slot.SetInventory(backend);
     }
 }

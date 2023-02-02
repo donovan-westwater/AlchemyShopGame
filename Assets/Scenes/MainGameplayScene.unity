@@ -1085,7 +1085,7 @@ GameObject:
   - component: {fileID: 608691063}
   m_Layer: 5
   m_Name: TestInventory
-  m_TagString: Untagged
+  m_TagString: CabinetInventory
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1122,6 +1122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37bed242165d03740bab089b1d254a55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  backend: {fileID: 608691064}
   slotPrefab: {fileID: 7212809923479819272, guid: 64f8d55b569e9a84b8ec703917c8a8a6,
     type: 3}
 --- !u!114 &608691064
@@ -1136,6 +1137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4da6c82abe88dc64cb9bf2979eb0ebf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPlayerInv: 0
   test: {fileID: 11400000, guid: bd6a3e0b7d1d6254d9e5f301b4133f10, type: 2}
   inventory: []
   playerInv: {fileID: 1479397368}
@@ -2676,9 +2678,11 @@ GameObject:
   m_Component:
   - component: {fileID: 1479397369}
   - component: {fileID: 1479397370}
+  - component: {fileID: 1479397371}
+  - component: {fileID: 1479397372}
   m_Layer: 5
   m_Name: PlayerTestInventory
-  m_TagString: Untagged
+  m_TagString: PlayerInventory
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2729,6 +2733,37 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &1479397371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1479397368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4da6c82abe88dc64cb9bf2979eb0ebf0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPlayerInv: 0
+  test: {fileID: 11400000, guid: bd6a3e0b7d1d6254d9e5f301b4133f10, type: 2}
+  inventory: []
+  playerInv: {fileID: 1479397368}
+--- !u!114 &1479397372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1479397368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37bed242165d03740bab089b1d254a55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  backend: {fileID: 1479397371}
+  slotPrefab: {fileID: 7212809923479819272, guid: 64f8d55b569e9a84b8ec703917c8a8a6,
+    type: 3}
 --- !u!1001 &1577249331
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6354,6 +6389,11 @@ PrefabInstance:
       propertyPath: m_TargetGraphic
       value: 
       objectReference: {fileID: 1629383715}
+    - target: {fileID: 6226758730606207331, guid: 64f8d55b569e9a84b8ec703917c8a8a6,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: TransferClick
+      objectReference: {fileID: 0}
     - target: {fileID: 7212809923479819272, guid: 64f8d55b569e9a84b8ec703917c8a8a6,
         type: 3}
       propertyPath: m_Name

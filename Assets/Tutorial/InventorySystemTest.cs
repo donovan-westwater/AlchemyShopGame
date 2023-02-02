@@ -28,22 +28,34 @@ public class InventorySystemTest : MonoBehaviour
 {
 
     private Dictionary<ScriptibleTest, InventoryItem> itemDict;
+    private int ID = 0;
+    public bool isPlayerInv = false;
     public ScriptibleTest test;
     public List<InventoryItem> inventory;
-    public GameObject playerInv;
-    public static InventorySystemTest instance;
+    public GameObject playerInv; //currently not used
+    public static List<InventorySystemTest> instanceList; //player reference
     public delegate void OnInventoryChangedEvent();
     public event OnInventoryChangedEvent onInventoryChangedEvent;
     private void Awake()
     {
-        if(instance == null)
+        if(instanceList == null)
         {
-            instance = this;
+            instanceList = new List<InventorySystemTest>();
         }
+        instanceList.Add(this);
+        ID = instanceList.Count;
+        if (gameObject.tag.Equals("PlayerInventory")) isPlayerInv = true;
         inventory = new List<InventoryItem>();
         itemDict = new Dictionary<ScriptibleTest, InventoryItem>();
     }
-
+    private void OnDestroy()
+    {
+        if (instanceList != null)
+        {
+            instanceList.Remove(this);
+        }
+    }
+    
     public void Add(ScriptibleTest referenceData)
     {
         if(itemDict.TryGetValue(referenceData, out InventoryItem value))
@@ -74,16 +86,16 @@ public class InventorySystemTest : MonoBehaviour
     }
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            this.Add(test);
+        if (isPlayerInv) { 
+            if(Input.GetKeyDown(KeyCode.Space))
+            {
+                this.Add(test);
+            }
+            if (Input.GetKeyDown(KeyCode.Delete))
+            {
+                this.Remove(test);
+            }
         }
-        if (Input.GetKeyDown(KeyCode.Delete))
-        {
-            this.Remove(test);
-        }
-
-
-
     }
+    
 }
