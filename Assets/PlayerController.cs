@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
         Vector3 p1 = transform.position + collider.center + Vector3.up * -collider.height * 0.5F;
         Vector3 p2 = p1 + Vector3.up * collider.height;
         bool check = Physics.CapsuleCast(p1, p2, collider.radius, transform.forward,out hit, 1);
-        return check;
+        return check && !hit.collider.isTrigger;
     }
 
     // Update is called once per frame

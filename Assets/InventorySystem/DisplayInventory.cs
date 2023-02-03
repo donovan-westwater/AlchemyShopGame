@@ -18,7 +18,7 @@ public class DisplayInventory : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI stackLabel;
 
-    private InventorySystemTest parentInv;
+    private InventorySystem parentInv;
 
     private InventoryItem reference;
     public void Set(InventoryItem item)
@@ -33,7 +33,7 @@ public class DisplayInventory : MonoBehaviour
         }
         stackLabel.text = item.stackSize.ToString(); 
     }
-    public void SetInventory(InventorySystemTest t)
+    public void SetInventory(InventorySystem t)
     {
         parentInv = t;
     }
@@ -42,7 +42,7 @@ public class DisplayInventory : MonoBehaviour
     {
         if (parentInv.isPlayerInv)
         {
-            foreach(InventorySystemTest t in InventorySystemTest.instanceList)
+            foreach(InventorySystem t in InventorySystem.instanceList)
             {
                 if (t.isPlayerInv == false && t.enabled)
                 {
@@ -56,7 +56,7 @@ public class DisplayInventory : MonoBehaviour
         }
         else
         {
-            parentInv.playerInv.GetComponent<InventorySystemTest>().Add(reference.data);
+            parentInv.playerInv.GetComponent<InventorySystem>().Add(reference.data);
             parentInv.Remove(reference.data);
         }
     }

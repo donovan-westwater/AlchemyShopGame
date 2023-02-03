@@ -7,9 +7,9 @@ using UnityEngine;
 [Serializable]
 public class InventoryItem
 {
-    public ScriptibleTest data;
+    public ScriptibleIngredient data;
     public int stackSize;
-    public InventoryItem(ScriptibleTest source)
+    public InventoryItem(ScriptibleIngredient source)
     {
         data = source;
         AddToStack();
@@ -24,29 +24,29 @@ public class InventoryItem
     }
 }
 //SHOULD BE A SINGLETON!
-public class InventorySystemTest : MonoBehaviour
+public class InventorySystem : MonoBehaviour
 {
 
-    private Dictionary<ScriptibleTest, InventoryItem> itemDict;
+    private Dictionary<ScriptibleIngredient, InventoryItem> itemDict;
     private int ID = 0;
     public bool isPlayerInv = false;
-    public ScriptibleTest test;
+    public ScriptibleIngredient test;
     public List<InventoryItem> inventory;
     public GameObject playerInv; //currently not used
-    public static List<InventorySystemTest> instanceList; //player reference
+    public static List<InventorySystem> instanceList; //player reference
     public delegate void OnInventoryChangedEvent();
     public event OnInventoryChangedEvent onInventoryChangedEvent;
     private void Awake()
     {
         if(instanceList == null)
         {
-            instanceList = new List<InventorySystemTest>();
+            instanceList = new List<InventorySystem>();
         }
         instanceList.Add(this);
         ID = instanceList.Count;
         if (gameObject.tag.Equals("PlayerInventory")) isPlayerInv = true;
         inventory = new List<InventoryItem>();
-        itemDict = new Dictionary<ScriptibleTest, InventoryItem>();
+        itemDict = new Dictionary<ScriptibleIngredient, InventoryItem>();
     }
     private void OnDestroy()
     {
@@ -56,7 +56,7 @@ public class InventorySystemTest : MonoBehaviour
         }
     }
     
-    public void Add(ScriptibleTest referenceData)
+    public void Add(ScriptibleIngredient referenceData)
     {
         if(itemDict.TryGetValue(referenceData, out InventoryItem value))
         {
@@ -71,7 +71,7 @@ public class InventorySystemTest : MonoBehaviour
         onInventoryChangedEvent();
     }
 
-    public void Remove(ScriptibleTest referenceData)
+    public void Remove(ScriptibleIngredient referenceData)
     {
         if(itemDict.TryGetValue(referenceData,out InventoryItem value))
         {

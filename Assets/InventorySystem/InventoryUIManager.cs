@@ -5,7 +5,7 @@ using UnityEngine;
 public class InventoryUIManager : MonoBehaviour
 {
     // Assoiated Inventory
-    public InventorySystemTest backend;
+    public InventorySystem backend;
     // Start is called before the first frame update
     public GameObject slotPrefab;
     void Start()
