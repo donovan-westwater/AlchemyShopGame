@@ -31,11 +31,13 @@ public class InventorySystem : MonoBehaviour
     private int ID = 0;
     public bool isPlayerInv = false;
     public ScriptibleIngredient test;
+    public ScriptibleIngredient test2;
     public List<InventoryItem> inventory;
     public GameObject playerInv; //currently not used
     public static List<InventorySystem> instanceList; //player reference
     public delegate void OnInventoryChangedEvent();
     public event OnInventoryChangedEvent onInventoryChangedEvent;
+    public int size = 0;
     private void Awake()
     {
         if(instanceList == null)
@@ -68,6 +70,7 @@ public class InventorySystem : MonoBehaviour
             inventory.Add(newItem);
             itemDict.Add(referenceData, newItem);
         }
+        size++;
         onInventoryChangedEvent();
     }
 
@@ -82,6 +85,7 @@ public class InventorySystem : MonoBehaviour
                 itemDict.Remove(referenceData);
             }
         }
+        size--;
         onInventoryChangedEvent();
     }
     private void Update()
@@ -94,6 +98,14 @@ public class InventorySystem : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Delete))
             {
                 this.Remove(test);
+            }
+            if (Input.GetKeyDown(KeyCode.Insert))
+            {
+                this.Add(test2);
+            }
+            if (Input.GetKeyDown(KeyCode.Backspace))
+            {
+                this.Remove(test2);
             }
         }
     }
