@@ -9,7 +9,8 @@ public class CraftingUIManager : MonoBehaviour
     public GameObject bSlot;
     public GameObject outputSlot;
     public GameObject slotPrefab;
-    
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -19,39 +20,58 @@ public class CraftingUIManager : MonoBehaviour
 
     void CraftingUpdate()
     {
-        //Update item slot vars
-        if (backend.inventoryBackend.size > 1)
+        //Update item input slot vars
+        //Remove extra items in inventory
+        foreach (InventoryItem c in backend.inventoryBackend.inventory)
         {
-            if (backend.inventoryBackend.inventory[0].stackSize > 1) backend.b = backend.inventoryBackend.inventory[0];
-            else backend.b = backend.inventoryBackend.inventory[1];
-            if (backend.inventoryBackend.size > 2) backend.output = backend.inventoryBackend.inventory[2];
-            
+            if (backend.a.data == null && backend.b.data != c.data)
+            {
+                backend.a = c;
+            }
+            else if (backend.b.data == null && backend.a.data != c.data)
+            {
+                backend.b = c;
+            }
+            else if (c.data != backend.a.data && c.data != backend.b.data)
+            {
+                backend.inventoryBackend.Remove(c.data);
+                //break;
+            }
+            else
+            {
+                if (backend.a.data == c.data) backend.a.stackSize = c.stackSize;
+                if (backend.b.data == c.data) backend.b.stackSize = c.stackSize;
+            }
+
         }
-        if (backend.inventoryBackend.size > 0)
-        {
-            backend.a = backend.inventoryBackend.inventory[0];
-        }
-        //Clear item slot objects
-        if (aSlot.transform.childCount > 0) Destroy(aSlot.transform.GetChild(0).gameObject);
-        if (bSlot.transform.childCount > 0) Destroy(bSlot.transform.GetChild(0).gameObject);
-        if (outputSlot.transform.childCount > 0) Destroy(outputSlot.transform.GetChild(0).gameObject);
-        //Create new item slots
+       
+        //Draw the slots
         CraftingDraw();
     }
-    void CraftingDraw()
+    public void CraftingDraw()
     {
-        if (backend.inventoryBackend.size > 0) SetCraftingSlot(backend.a,aSlot);
-        if (backend.inventoryBackend.size > 1) SetCraftingSlot(backend.b, bSlot);
-        if (backend.inventoryBackend.size > 2) SetCraftingSlot(backend.output, outputSlot);
+        //Clear item slot objects
+        if (aSlot.transform.childCount > 0) DestroyImmediate(aSlot.transform.GetChild(0).gameObject);
+        if (bSlot.transform.childCount > 0) DestroyImmediate(bSlot.transform.GetChild(0).gameObject);
+        if (outputSlot.transform.childCount > 0) DestroyImmediate(outputSlot.transform.GetChild(0).gameObject);
+        //create new item slots
+        if (backend.a.data != null && backend.a.stackSize > 0) SetCraftingSlot(backend.a,aSlot,false);
+        if (backend.b.data != null && backend.b.stackSize > 0) SetCraftingSlot(backend.b, bSlot,false);
+        if (backend.outputEmpty == false) SetCraftingSlot(backend.output, outputSlot,true);
     }
-    void SetCraftingSlot(InventoryItem c,GameObject s)
+    void SetCraftingSlot(InventoryItem c,GameObject s,bool b)
     {
         GameObject obj = Instantiate(slotPrefab);
         obj.transform.SetParent(s.transform, false);
+        obj.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0.5f);
+        obj.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0.5f);
+        obj.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
 
-        DisplayInventory slot = obj.GetComponent<DisplayInventory>();
+        DisplayCrafting slot = obj.GetComponent<DisplayCrafting>();
         slot.Set(c);
+        slot.Set(backend, c, b);
         slot.SetInventory(backend.inventoryBackend);
     }
+
     
 }

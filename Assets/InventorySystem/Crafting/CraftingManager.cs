@@ -14,12 +14,16 @@ public class CraftingManager : MonoBehaviour
     [HideInInspector]
     public InventoryItem output;
     [HideInInspector]
+    public bool outputEmpty = true;
+    [HideInInspector]
     public bool isCrafting = false;
     public bool controlRange = false;
     // Start is called before the first frame update
     void Start()
     {
         inventoryBackend.gameObject.SetActive(false);
+        a.data = null;
+        b.data = null;
     }
 
     // Update is called once per frame
@@ -31,18 +35,9 @@ public class CraftingManager : MonoBehaviour
         }
         if (isCrafting) ui.gameObject.SetActive(true);
         else ui.gameObject.SetActive(false);
-        //Remove extra items in inventory
-        if (inventoryBackend.size > 2)
-        {
-            foreach (InventoryItem c in inventoryBackend.inventory)
-            {
-                if (c != a && c != b && c != output)
-                {
-                    inventoryBackend.Remove(c.data);
-                    break;
-                }
-            }
-        }
+
+        
+        
         
         if (Input.GetKeyDown(KeyCode.C))
         {
@@ -54,10 +49,29 @@ public class CraftingManager : MonoBehaviour
         if (a == null || b == null) return;
         foreach(Recipe r in recipes)
         {
-            if(r.inputA == a.data &&a.stackSize == r.aAmount && r.inputB == b.data && b.stackSize == r.bAmount)
+            bool OrderA = r.inputA == a.data && a.stackSize == r.aAmount && r.inputB == b.data && b.stackSize == r.bAmount;
+            bool OrderB = r.inputA == b.data && b.stackSize == r.aAmount && r.inputB == a.data && a.stackSize == r.bAmount;
+            if (OrderA || OrderB)
             {
-                output = new InventoryItem(r.output);
-                inventoryBackend.Add(r.output);
+                //a.RemoveFromStack();
+                //b.RemoveFromStack();
+               
+                if (outputEmpty)
+                {
+                    outputEmpty = false;
+                    output = new InventoryItem(r.output);
+                }
+                else
+                {
+                    output.AddToStack();
+                }
+                inventoryBackend.Remove(a.data);
+                inventoryBackend.Remove(b.data);
+
+                if (a.stackSize < 1) a.data = null;
+                if (b.stackSize < 1) b.data = null;
+                //ui.CraftingDraw();
+                //inventoryBackend.Add(r.output);
                 return;
             }
         }
